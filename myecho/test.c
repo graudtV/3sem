@@ -3,6 +3,7 @@
 #include <string.h>
 
 char *test_strings[] = {
+	"",
 	"abc",
 	"abc def",
 	"abc  def  klm",
@@ -12,7 +13,7 @@ char *test_strings[] = {
 	"-nnnnnn abc",
 	"-n -n abc",
 	"-nn -nn -nn abc",
-	"-nm abc",
+	"-n -nm abc",
 	"-nmn abc",
 	"-n -nmn abc",
 	"- abc",

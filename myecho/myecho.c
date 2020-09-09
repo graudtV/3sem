@@ -4,8 +4,26 @@
 /* returns true - если символ новой строки должен выводится
  * returns false - в противном случае
  * pargv должен указывать на argv[0] в main()
- * parse_newline() переводит *pargv на первый неразобранный
- * аргумент */ 
+ * parse_newline() переводит *pargv на первый неразобранный аргумент
+ *
+ * Примеры разбора:
+ *	- Параметры myecho -	- Вывод myecho -
+ * ""					-> ""				+ newline
+ *	"abc"				-> "abc" 			+ newline
+ *	"abc def"			-> "abc def" 		+ newline	
+ *	"abc  def  klm"		-> "abc def klm"	+ newline
+ *	"-n abc"			-> "abc"
+ *	"-nn abc"			-> "abc"
+ *	"-nnnnnn abc"		-> "abc"
+ *	"-n -n abc"			-> "abc"
+ *	"-nn -nn -nn abc"	-> "abc"
+ *	"-nm abc"			-> "-nm abc" 		+ newline	// Параметр '-mn' некорректен, поэтому не учитывается и отправляется на вывод
+ *	"-nmn abc"			-> "-nmn abc"		+ newline
+ *	"-n -nmn abc"		-> "-nmn abc"		// Первый аргумент корректен, поэтому newline нет
+ *	"- abc"				-> "- abc"			// '-' без букв - не является корректным параметром
+ *	"- -n abc"			-> "- -n abc"
+ *	"-m abc"			-> "-m abc"
+ */
 bool parse_newline(char ***pargv)
 {
 	char **fst_arg = ++*pargv;
