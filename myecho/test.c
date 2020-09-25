@@ -34,17 +34,13 @@ int main()
 	char cmd2[MAXLINE] = "";
 
 	for (int i = 0; i < ARR_SZ(test_strings); ++i) {
-
 		strcpy(cmd1, MYECHO " > out1 ");
 		strcpy(cmd2, BENCHMARK_ECHO " > out2 ");
 		strcat(cmd1, test_strings[i]);
 		strcat(cmd2, test_strings[i]);
 
-		//printf("'%s' and '%s'\n", cmd1, cmd2);
-
 		system(cmd1);
 		system(cmd2);
-
 
 		if (system("diff out1 out2 > /dev/null")) {
 			fprintf(stderr, "difference in commands '%s'"
