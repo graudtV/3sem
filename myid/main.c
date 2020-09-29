@@ -6,23 +6,9 @@
 #include <stdio.h>
 #include <errno.h>
 #include <ctype.h>
-#include <stdlib.h>
-#include <stdarg.h>
 
-#define PROGNAME "myid"
-
-void error(const char *fmt, ...)
-{
-	fprintf(stderr, PROGNAME ": ");
-	
-	va_list args;
-	va_start(args, fmt);
-	vfprintf(stderr, fmt, args);
-	va_end(args);
-
-	fputc('\n', stderr);
-	exit(EXIT_FAILURE);
-}
+#define PROGRAM_NAME "myid"
+#include "../frequent_features.h"
 
 /* Returns passwd entry, terminates programm if user doesnot exist
  * or any other error occures */
