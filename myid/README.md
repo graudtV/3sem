@@ -1,7 +1,7 @@
 # myid
 ## Build
 ```
-cc -o myid main.c
+cc -o myid myid.c
 ```
 ## Usage
 ```
