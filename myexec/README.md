@@ -1,13 +1,13 @@
 # myexec 
 Executes programm and prints execution time if specified
-# Build
+## Build
 ```
 cc -o myexec myexec.c
 ```
-# Usage:
+## Usage:
 ```
 ./myexec [-tT] program program_options ...
 ```
-Options:
+### Options:
 - **-t**  --  print cpu time
 - **-T**  --  print real time
