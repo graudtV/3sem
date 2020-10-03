@@ -31,23 +31,33 @@ void info(FILE* fout, const char *fmt, ...)
  * and terminates programm after printing */
 void error(const char *fmt, ...)
 {
-	va_list(args);
+#ifdef PROGRAM_NAME
+	fprintf(stderr, PROGRAM_NAME ": ");
+#endif
+	
+	va_list args;
 	va_start(args, fmt);
-	info(stderr, fmt, args);
+	vfprintf(stderr, fmt, args);
 	va_end(args);
 
+	fputc('\n', stderr);
 	exit(EXIT_FAILURE);
-}
+ }
 
-/* returns < 0 if any error occurs */
-int copy_file(int fd_src, int fd_dst)
+/*  Copyies file with file descriptor fd_src to file with
+ * descriptor fd_dst
+ *  Returns 0 if success, -1 otherwise */
+int copyfile(int fd_src, int fd_dst)
 {
 	char buf[BUFSIZ];
 	int n = 0;
 
-	while ((n = read(fd_src, buf, BUFSIZ)) > 0)
-		if ((n = write(fd_dst, buf, n)) < 0)
-			break;
+	while ((n = read(fd_src, buf, BUFSIZ)) > 0) {
+		char *bufend = buf + n;
+		for (char *p = buf; p < bufend; p += n)
+			if ((n = write(fd_dst, p, bufend - p)) < 0)
+				break;
+	}
 	return n;
 }
 
