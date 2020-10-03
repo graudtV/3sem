@@ -34,7 +34,7 @@ void error(const char *fmt, ...)
 #ifdef PROGRAM_NAME
 	fprintf(stderr, PROGRAM_NAME ": ");
 #endif
-	
+
 	va_list args;
 	va_start(args, fmt);
 	vfprintf(stderr, fmt, args);
@@ -44,7 +44,7 @@ void error(const char *fmt, ...)
 	exit(EXIT_FAILURE);
  }
 
-/*  Copyies file with file descriptor fd_src to file with
+/*  Copies file with file descriptor fd_src to file with
  * descriptor fd_dst
  *  Returns 0 if success, -1 otherwise */
 int copyfile(int fd_src, int fd_dst)
