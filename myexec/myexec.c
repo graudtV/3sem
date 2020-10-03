@@ -1,9 +1,9 @@
 /* myexec: executes programm and prints execution time if specified
- * Usage: ./myexec [-tT] [-q] program program_options ...
+ * Usage: ./myexec [-tT] [-qc] program program_options ...
  * Options:
  * 		-t -- print cpu time
  *		-T -- print real time
- *		-q -- quiet mode (suppress program's output)
+ *		-q -- quiet mode (suppress executed program's output)
  *		-c -- count number of lines, words and bytes in output
  **/
 
