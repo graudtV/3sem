@@ -39,5 +39,16 @@ void error(const char *fmt, ...)
 	exit(EXIT_FAILURE);
 }
 
+/* returns < 0 if any error occurs */
+int copy_file(int fd_src, int fd_dst)
+{
+	char buf[BUFSIZ];
+	int n = 0;
+
+	while ((n = read(fd_src, buf, BUFSIZ)) > 0)
+		if ((n = write(fd_dst, buf, n)) < 0)
+			break;
+	return n;
+}
 
 #endif // _FREQUENT_FEATURES_H_
