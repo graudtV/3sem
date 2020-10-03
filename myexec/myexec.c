@@ -1,8 +1,10 @@
 /* myexec: executes programm and prints execution time if specified
- * Usage: ./myexec [-tT] program program_options ...
+ * Usage: ./myexec [-tT] [-q] program program_options ...
  * Options:
  * 		-t -- print cpu time
  *		-T -- print real time
+ *		-q -- quiet mode (suppress program's output)
+ *		-c -- count number of lines, words and bytes in output
  **/
 
 #include <unistd.h>
@@ -20,13 +22,18 @@
 
 void usage_error()
 {
-	printf("Usage: %s [-tT] [-q] program program_options ...\n", PROGRAM_NAME);
-	printf("\t-t\t--\tprint cpu time\n");
-	printf("\t-T\t--\tprint real time\n");
-	printf("\t-q\t--\tquiet mode\n");
+	fprintf(stderr, "Usage: %s [-tT] [-qc] program program_options ...\n",
+		PROGRAM_NAME);
+	fprintf(stderr,
+		"\t-t\t--\tprint cpu time\n"
+		"\t-T\t--\tprint real time\n"
+		"\t-q\t--\tquiet mode\n"
+		"\t-c\t--\tcount number of lines, words and bytes in output\n");
 	exit(EXIT_FAILURE);
 }
 
+/*  Returns struct with current time, terminates program
+ * if error occurs */
 struct timespec get_time_s(clockid_t clock_id)
 {
 	struct timespec time;
@@ -47,7 +54,7 @@ void print_time_diff(struct timespec end, struct timespec begin, FILE *fout)
 		sec, nsec / (int) 1e6, (nsec / 1000) % 1000);
 }
 
-/*  Stores information about number of bytes, words and lines in file */
+/* Stores information about number of bytes, words and lines in file */
 struct file_info_t {
 	size_t bytes;
 	long words;
@@ -101,13 +108,15 @@ int main(int argc, char *argv[])
 	int opt_cpu_time = 0;
 	int opt_real_time = 0;
 	int opt_quiet = 0;
+	int opt_count = 0;
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "+tTq")) != -1) {
+	while ((opt = getopt(argc, argv, "+tTqc")) != -1) {
 		switch (opt) {
 		case 't': opt_cpu_time = 1; break;
 		case 'T': opt_real_time = 1; break;
 		case 'q': opt_quiet = 1; break;
+		case 'c': opt_count = 1; break;
 		default: usage_error();
 		}
 	}
@@ -127,10 +136,8 @@ int main(int argc, char *argv[])
 	int pipe_write_fd = pipe_fds[1];
 
 	int output_fd = STDOUT_FILENO;
-	if (opt_quiet) {
-		if ((output_fd = open("/dev/null", O_RDONLY)) == -1)
-			error("cannot open /dev/null: %s", strerror(errno));
-	}
+	if (opt_quiet && ((output_fd = open("/dev/null", O_RDONLY)) == -1))
+		error("cannot open /dev/null: %s", strerror(errno));
 
 	struct timespec real_time_start = get_time_s(CLOCK_MONOTONIC);
 	struct timespec cpu_time_start = get_time_s(CLOCK_PROCESS_CPUTIME_ID);
@@ -161,9 +168,9 @@ int main(int argc, char *argv[])
 		print_time_diff(cpu_time_end, cpu_time_start, stderr);
 	}
 	
-	printf("lines: %ld\n", file_info.lines);
-	printf("words: %ld\n", file_info.words);
-	printf("bytes: %zu\n", file_info.bytes);
+	if (opt_count)
+		fprintf(stderr, "lines: %ld\nwords: %ld\nbytes: %zu\n",
+			file_info.lines, file_info.words, file_info.bytes);
 
 	return 0;
 }
