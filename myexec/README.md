@@ -6,8 +6,10 @@ cc -o myexec myexec.c
 ```
 ## Usage:
 ```
-./myexec [-tT] program program_options ...
+./myexec [-tT] [-qc] program program_options ...
 ```
 ### Options:
 - **-t**  --  print cpu time
 - **-T**  --  print real time
+- **-q**  --  quiet mode (suppress executed program's output)
+- **-c**  --  count number of lines, words and bytes in output
