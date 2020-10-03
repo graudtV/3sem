@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 	int opt_real_time = 0;
 	int opt = 0;
 
-	while ((opt = getopt(argc, argv, "tT")) != -1) {
+	while ((opt = getopt(argc, argv, "+tT")) != -1) {
 		switch (opt) {
 		case 't': opt_cpu_time = 1; break;
 		case 'T': opt_real_time = 1; break;
