@@ -1,5 +1,5 @@
 # myexec 
-Executes programm and prints execution time if specified
+Executes program and prints execution time if specified
 ## Build
 ```
 cc -o myexec myexec.c
