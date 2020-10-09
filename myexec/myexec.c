@@ -146,12 +146,14 @@ int main(int argc, char *argv[])
 	if (ret == 0) {
 		close(pipe_read_fd);
 		if (dup2(pipe_write_fd, STDOUT_FILENO) == -1) // Теперь stdout тоже будет писать в pipe
-			error("cannot create pipe: %s", strerror(errno));
+			error("dup2() failed: %s", strerror(errno));
 		close(pipe_write_fd); // Теперь в pipe пишет только stdout
 		if (execvp(*argv, argv) == -1)
 			error("cannot execute '%s': %s", *argv, strerror(errno));
 		exit(EXIT_SUCCESS);
 	}
+	if (ret == -1)
+		error("cannot create child process to run '%s': %s", *argv, strerror(errno));
 	close(pipe_write_fd);
 	struct file_info_t file_info = {};
 	copyfile_informative(pipe_read_fd, output_fd, &file_info);
