@@ -129,12 +129,8 @@ int main(int argc, char *argv[])
 		usage_error();
 	}
 
-	int pipe_fds[2];
-	if (pipe(pipe_fds) != 0)
-		error("cannot create pipe: %s", strerror(errno));
-	int pipe_read_fd = pipe_fds[0];
-	int pipe_write_fd = pipe_fds[1];
-
+	/* Файл, в который перенаправится вывод дочерней программы после pipe-a
+	 * По умолчанию - stdout родителя */
 	int output_fd = STDOUT_FILENO;
 	if (opt_quiet && ((output_fd = open("/dev/null", O_RDONLY)) == -1))
 		error("cannot open /dev/null: %s", strerror(errno));
@@ -142,21 +138,11 @@ int main(int argc, char *argv[])
 	struct timespec real_time_start = get_time_s(CLOCK_MONOTONIC);
 	struct timespec cpu_time_start = get_time_s(CLOCK_PROCESS_CPUTIME_ID);
 	
-	pid_t ret = fork();
-	if (ret == 0) {
-		close(pipe_read_fd);
-		if (dup2(pipe_write_fd, STDOUT_FILENO) == -1) // Теперь stdout тоже будет писать в pipe
-			error("dup2() failed: %s", strerror(errno));
-		close(pipe_write_fd); // Теперь в pipe пишет только stdout
-		if (execvp(*argv, argv) == -1)
-			error("cannot execute '%s': %s", *argv, strerror(errno));
-		exit(EXIT_SUCCESS);
-	}
-	if (ret == -1)
-		error("cannot create child process to run '%s': %s", *argv, strerror(errno));
-	close(pipe_write_fd);
+	int child_pipe_output_fd;
+	execute(*argv, argv, STDIN_FILENO, &child_pipe_output_fd);
+
 	struct file_info_t file_info = {};
-	copyfile_informative(pipe_read_fd, output_fd, &file_info);
+	copyfile_informative(child_pipe_output_fd, output_fd, &file_info);
 	wait(NULL);
 
 	if (opt_real_time) {
