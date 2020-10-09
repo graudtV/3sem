@@ -50,7 +50,7 @@ void print_time_diff(struct timespec end, struct timespec begin, FILE *fout)
 		++sec;
 		nsec += (int) 1e9;
 	}
-	fprintf(stderr, "%4lds %4ldus %4ldms\n",
+	fprintf(fout, "%4lds %4ldus %4ldms\n",
 		sec, nsec / (int) 1e6, (nsec / 1000) % 1000);
 }
 
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 	struct timespec real_time_start = get_time_s(CLOCK_MONOTONIC);
 	struct timespec cpu_time_start = get_time_s(CLOCK_PROCESS_CPUTIME_ID);
 	
-	gid_t ret = fork();
+	pid_t ret = fork();
 	if (ret == 0) {
 		close(pipe_read_fd);
 		if (dup2(pipe_write_fd, STDOUT_FILENO) == -1) // Теперь stdout тоже будет писать в pipe
