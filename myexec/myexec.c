@@ -16,8 +16,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
-#define PROGRAM_NAME "myexec"
+#define FREQUENT_FEATURES_SINGLE_FILE
 #include "../frequent_features.h"
 
 void usage_error()
@@ -32,79 +33,10 @@ void usage_error()
 	exit(EXIT_FAILURE);
 }
 
-/*  Returns struct with current time, terminates program
- * if error occurs */
-struct timespec get_time_s(clockid_t clock_id)
-{
-	struct timespec time;
-	if (clock_gettime(clock_id, &time) == -1)
-		error("cannot get current time: %s", strerror(errno));
-	return time;
-}
-
-void print_time_diff(struct timespec end, struct timespec begin, FILE *fout)
-{
-	time_t sec = end.tv_sec - begin.tv_sec;
-	long nsec = end.tv_nsec - begin.tv_nsec;
-	while (nsec < 0) {
-		++sec;
-		nsec += (int) 1e9;
-	}
-	fprintf(fout, "%4lds %4ldus %4ldms\n",
-		sec, nsec / (int) 1e6, (nsec / 1000) % 1000);
-}
-
-/* Stores information about number of bytes, words and lines in file */
-struct file_info_t {
-	size_t bytes;
-	long words;
-	long lines;
-};
-
-/*  Copies file with file descriptor fd_src to file with
- * descriptor fd_dst.
- *  Returns 0 if success, -1 otherwise
- *  On success, writes number of copied bytes, words and lines
- * to struct file_info_t pointed by info */
-int copyfile_informative(int fd_src, int fd_dst, struct file_info_t *info)
-{
-	if (!info)
-		return copyfile(fd_src, fd_dst);
-
-	struct file_info_t temp_info = {};
-
-	char buf[BUFSIZ];
-	int n = 0;
-	bool in_word = false;
-
-	while ((n = read(fd_src, buf, BUFSIZ)) > 0) {
-		temp_info.bytes += n;
-		char *bufend = buf + n;	
-		for (char *p = buf; p < bufend; p += n)
-			if ((n = write(fd_dst, p, bufend - p)) < 0)
-				break;
-
-		for (char *p = buf; p < bufend; ++p) {
-			if (*p == '\n')
-				++temp_info.lines;
-			if (!isgraph(*p)) {
-				in_word = false;
-			} else if(!in_word) {
-				in_word = true;
-				++temp_info.words;				
-			}
-		}
-	}
-	if (n == 0) { // success
-		info->bytes = temp_info.bytes;
-		info->words = temp_info.words;
-		info->lines = temp_info.lines;
-	}
-	return n;
-}
-
 int main(int argc, char *argv[])
 {
+	PROGRAM_NAME = argv[0];
+
 	int opt_cpu_time = 0;
 	int opt_real_time = 0;
 	int opt_quiet = 0;
@@ -154,8 +86,7 @@ int main(int argc, char *argv[])
 		struct timespec cpu_time_end = get_time_s(CLOCK_PROCESS_CPUTIME_ID);
 		fprintf(stderr, "cpu time:  ");
 		print_time_diff(cpu_time_end, cpu_time_start, stderr);
-	}
-	
+	}	
 	if (opt_count)
 		fprintf(stderr, "lines: %ld\nwords: %ld\nbytes: %zu\n",
 			file_info.lines, file_info.words, file_info.bytes);
