@@ -4,6 +4,7 @@
 #define FREQUENT_FEATURES_H_
 
 #include <stdio.h> // for FILE
+#include <time.h> // clockid_t
 
 /* May be set to modify info() and error() functions
 * behaviour, see info() description */

@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <string.h>
 
+#define FREQUENT_FEATURES_SINGLE_FILE
 #include "../frequent_features.h"
 
 int main(int argc, char *argv[])

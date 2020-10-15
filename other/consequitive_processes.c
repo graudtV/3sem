@@ -5,8 +5,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include "../frequent_features.h"
 #include <assert.h>
+
+#define FREQUENT_FEATURES_SINGLE_FILE
+#include "../frequent_features.h"
 
 void create_conseq_proc(int nchildren)
 {

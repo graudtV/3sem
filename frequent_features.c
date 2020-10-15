@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <errno.h>
 #include <string.h> // strerror()
+#include <stdbool.h>
+#include <ctype.h>
 
 const char *PROGRAM_NAME;
 

@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <ctype.h>
 
-#define PROGRAM_NAME "myid"
+#define FREQUENT_FEATURES_SINGLE_FILE
 #include "../frequent_features.h"
 
 /* Returns passwd entry, terminates programm if user doesnot exist
@@ -98,6 +98,7 @@ void print_groups(const char *username, gid_t basegid)
 
 int main(int argc, char *argv[])
 {
+	PROGRAM_NAME = argv[0];
 	++argv;
 
 	uid_t uid = 0;
