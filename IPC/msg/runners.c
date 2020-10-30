@@ -79,8 +79,11 @@ void runner(int msgq_id, int participant_id, int next_participant_id, int judge_
 int main()
 {
 	setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
-	int nrunners = 10000;
-	int msgq_id = msgget(IPC_PRIVATE, 0600);
+	setvbuf(stderr, NULL, _IOLBF, BUFSIZ);
+	int nrunners = 100;
+	int msgq_id;
+	if ((msgq_id = msgget(IPC_PRIVATE, 0600)) == -1)
+		error("failed to create queue: %s", strerror(errno));
 	
 	PARALLEL(judge(msgq_id, 0, 1, nrunners));
 	for (int i = 1; i < nrunners; ++i)
@@ -91,7 +94,7 @@ int main()
 		wait(NULL);
 
 	if (msgctl(msgq_id, IPC_RMID, 0) == -1)
-		error("failed to delete queue");
+		error("failed to delete queue %s", strerror(errno));
 
 	return 0;
 }
