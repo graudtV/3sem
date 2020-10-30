@@ -63,9 +63,13 @@ int sem_add(semaphore_t sem, unsigned int value)
 int sem_sub(semaphore_t sem, unsigned int value)
 	{ return sem_add_signed(sem, -value); }
 
+int sem_destroy_group(semaphore_t member)
+	{ return sem_destroy(member.sem_array_id); }
+
 /* helper function for sem_array() */
 static int sem_array_v(key_t key, int nsems, int semflg, va_list list)
 {
+	// TODO: проинциализировать семафоры вручную для переносимости
 	int sem_array_id = semget(key, nsems, semflg);
 	if (sem_array_id != -1) {
 		int i = 0;

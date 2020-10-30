@@ -16,6 +16,7 @@ typedef struct {
 
 int sem_array(key_t key, int semflg, /* semaphore_t *psem1, */ ...);
 int sem_destroy(int sem_array_id);
+int sem_destroy_group(semaphore_t member);
 
 int sem_inc(semaphore_t sem);
 int sem_dec(semaphore_t sem);
