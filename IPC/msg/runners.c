@@ -78,8 +78,8 @@ void runner(int msgq_id, int participant_id, int next_participant_id, int judge_
 
 int main()
 {
-	setvbuf(stdout, NULL, _IOLBF, BUFSIZ);
-	setvbuf(stderr, NULL, _IOLBF, BUFSIZ);
+	setlinebuf(stdout);
+	setlinebuf(stderr);
 	int nrunners = 100;
 	int msgq_id;
 	if ((msgq_id = msgget(IPC_PRIVATE, 0600)) == -1)
