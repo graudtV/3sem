@@ -30,7 +30,7 @@ int _cvec_reserve(void *vector, size_t new_capacity, size_t elem_sz)
 	return CVECTOR_OK;
 }
 
-void cvec_destroy(void *vector)
+void _cvec_destroy(void *vector)
 {
 	struct _generic_cvector_ *vec = vector;
 	free(vec->data);
