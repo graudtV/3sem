@@ -25,17 +25,19 @@ void execute(const char *file, char * const argv[], int input_fd, int *output_fd
 struct timespec get_time_s(clockid_t clock_id);
 void print_time_diff(struct timespec end, struct timespec begin, FILE *fout);
 
-/* Executes function as a child process
+/* Starts executing function as a child process
  * Return value of called function is ignored.
+ * Returns pid of child, if success. Overwise, terminates programm
  * Note. Do not forget to call wait() for each PARALLEL() */
-#define PARALLEL(func_call)	{								\
+#define PARALLEL(func_call)	({								\
 		pid_t _fork_res;									\
 		if ((_fork_res = fork()) == 0) {					\
 			func_call;										\
 			exit(EXIT_SUCCESS);								\
 		} else if (_fork_res == -1)							\
 			error("fork() failed: %s", strerror(errno));	\
-	}
+		_fork_res;											\
+	})
 
 /*  If macro FREQUENT_FEATURES_SINGLE_FILE is defined,
  * source code of frequent_features.c will be included in place */
