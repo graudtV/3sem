@@ -1,6 +1,6 @@
 /* Implementation of some methods for general vector */
 
-#include "cvector.h"
+#include "../include/cvector.h"
 
 /* new_capacity - number of elements */
 static int _cvec_expand(void *vector, size_t new_capacity, size_t elem_sz)

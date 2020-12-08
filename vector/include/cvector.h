@@ -55,7 +55,7 @@ void cvec_destroy(void *vector);
 #define cvec_end(vecname)		((vecname)->data + (vecname)->size)
 
 #ifdef CVECTOR_SINGLE_FILE
-#include "cvector.c"
+#include "../src/cvector.c"
 #endif
 
 #endif // CVECTOR_H_
