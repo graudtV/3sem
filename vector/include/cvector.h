@@ -38,11 +38,11 @@
 #define cvector_modify(type) _cvector_##type##_not_owning_modify_
 
 /* Returns an object with not owning read-only access to existing vector */
-#define cvec_viewer(vecname)	\
+#define cvec_get_viewer(vecname)	\
 	((void *) (vecname))
 
 /* Returns an object with not owning read and write access to existing vector */
-#define cvec_modifier(vecname) ({															\
+#define cvec_get_modifier(vecname) ({															\
 		_assert_is_owner(vecname) /* ERR: YOU HAVE ONLY VIEW ACCESS, CANNOT GET MODIFIER */	\
 		((void *) (vecname));																\
 	})
