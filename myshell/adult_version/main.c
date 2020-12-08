@@ -14,11 +14,13 @@
 #define MAX_ARGS 1000 // max arguments in one command
 
 #define BASH_NAME "ebash"
-const char *greeting_msg = CONSOLE_GREEN("***** Welcome to ") CONSOLE_PURPLE(BASH_NAME) CONSOLE_GREEN(" !!! *****");
-const char *leaving_msg = CONSOLE_GREEN("***** Thanks for using ") CONSOLE_PURPLE(BASH_NAME) CONSOLE_GREEN(" !!! *****");
-const char *error_prompt = CONSOLE_PURPLE("-" BASH_NAME);
-const char *prompt = CONSOLE_PURPLE(BASH_NAME "$ ");
-const char *short_prompt = CONSOLE_PURPLE("> ");
+#define GREEN(text) CONSOLE_BOLD(CONSOLE_GREEN(text))
+#define PURPLE(text) CONSOLE_BOLD(CONSOLE_PURPLE(text))
+const char *greeting_msg = GREEN("***** Welcome to ") PURPLE(BASH_NAME) GREEN(" !!! *****");
+const char *leaving_msg = GREEN("***** Thanks for using ") PURPLE(BASH_NAME) GREEN(" !!! *****");
+const char *error_prompt = PURPLE("-" BASH_NAME);
+const char *prompt = PURPLE(BASH_NAME "$ ");
+const char *short_prompt = PURPLE("> ");
 
 typedef enum {
 	TOK_UNKNOWN, TOK_TOO_LONG_ARG, TOK_EOF, TOK_ARG, TOK_PIPE, TOK_NEWLINE
