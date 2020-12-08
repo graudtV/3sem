@@ -4,13 +4,14 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <signal.h>
+#include <sys/wait.h>
 #include "../console_colors.h"
 
 #define FREQUENT_FEATURES_SINGLE_FILE
 #include "../frequent_features.h"
 
-const int MAX_TOKEN = 256; // max argument length
-const int MAX_ARGS = 1000; // max arguments in one command
+#define MAX_TOKEN 256 // max argument length
+#define MAX_ARGS 1000 // max arguments in one command
 
 #define BASH_NAME "mybash"
 const char *greeting_msg = CONSOLE_GREEN("***** Welcome to ") CONSOLE_PURPLE(BASH_NAME) CONSOLE_GREEN(" !!! *****");
