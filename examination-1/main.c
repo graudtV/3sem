@@ -129,6 +129,7 @@ void init_ipcs()
 	if ((shmid = shmget(IPC_PRIVATE, sizeof (*shared), 0600)) == -1
 		|| (shared = shmat(shmid, NULL, 0)) == NULL)
 		error("failed to create shared memory: %s", strerror(errno));
+
 	/* shared->bridge_state is BRIDGE_CLOSED by default, because
 	 * BRIDGE_STATE = 0 and shmget returns memory, filled with nulls */
 
