@@ -13,8 +13,6 @@ void fill_with_conseq_numbers(cvector_modify(int) numbers, int nvalues, int init
 	cvec_reserve(numbers, nvalues); // reducing number of reallocations
 	for (int i = init; i < nvalues + init; ++i)
 		cvec_push_back(numbers, i);
-
-	cvector_view(int) v = cvec_get_viewer(numbers);
 }
 
 void print_int_vector(cvector_view(int) numbers)
