@@ -7,7 +7,8 @@
 #define FREQUENT_FEATURES_SINGLE_FILE
 #include "../frequent_features.h"
 
-bool letters[256] = {};
+#define MAXLETTERS 256
+bool letters[MAXLETTERS] = {};
 int nchildren = 0;
 int queue_id;
 
@@ -76,7 +77,7 @@ int main(int argc, char *argv[])
 		send_letter((argc > 1) ? ' ' : '\n');
 	}
 
-	for (int c = 0; c < 256; ++c)
+	for (int c = 0; c < MAXLETTERS; ++c)
 		kill_letter(c);
 	for (int i = 0; i < nchildren; ++i)
 		if (wait(NULL) == -1)
