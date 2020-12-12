@@ -58,7 +58,7 @@ void kill_letter(int c)
 		msg.mtype = letter_to_type(c);
 		msg.kill_letter = true;
 		if (msgsnd(queue_id, &msg, sizeof msg.kill_letter, 0) == -1)
-			error("failed to send letter '%c' (%d): %s", c, c, strerror(errno));
+			error("failed to kill letter '%c' (%d): %s", c, c, strerror(errno));
 	}
 }
 
@@ -71,15 +71,15 @@ int main(int argc, char *argv[])
 
 	while (--argc > 0) {
 		++argv;
-		for (char *p = *argv; *p; ++p) {
+		for (char *p = *argv; *p; ++p)
 			send_letter(*p);
-		}
 		send_letter((argc > 1) ? ' ' : '\n');
 	}
 
 	for (int c = 0; c < 256; ++c)
 		kill_letter(c);
 	for (int i = 0; i < nchildren; ++i)
-		wait(NULL);
+		if (wait(NULL) == -1)
+			perror("wait()");
 	return 0;
 }
