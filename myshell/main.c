@@ -129,17 +129,15 @@ token_type_t process_next_command()
 			continue;
 		}
 		args[args_sz] = NULL;
-		if (current_token.type != TOK_PIPE) {
-			execute(args[0], args, input_fd, NULL);
-			break;
-		} else { // TOK_PIPE => transfering output
-			execute(args[0], args, input_fd, &output_fd);
-			if (input_fd != STDIN_FILENO) // child now has his own access to this file, can release in parent
-				close(input_fd);
+		execute(args[0], args, input_fd,
+			(current_token.type == TOK_PIPE) ? &output_fd : NULL);
+		if (input_fd != STDIN_FILENO)
+			close(input_fd);
+		if (current_token.type == TOK_PIPE) {
 			input_fd = output_fd;
 			get_token(); // skip TOK_PIPE
-		}
-		
+		} else
+			break;
 	}
 	while (wait(NULL) != -1)
 		;
