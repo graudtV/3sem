@@ -48,7 +48,8 @@ void error(const char *fmt, ...)
 
 /*  Copies file with file descriptor fd_src to file with
  * descriptor fd_dst
- *  Returns 0 on success, -1 otherwise. errno is set appropriately */
+ *  Returns > 0 if something was copied, 0 if fd_src is empty,
+ * -1 on error. In the latter case errno is set appropriately */
 int copyfile(int fd_src, int fd_dst)
 {
 	char buf[BUFSIZ];

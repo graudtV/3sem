@@ -19,11 +19,16 @@
 *    stdin    |            v      |            |    stdout    *
 *   ------>[child0]        [child1]         [child3]------>   *
 *                                                             *
-**************************************************************/              
+**************************************************************/
 
 int main(int argc, const char *argv[])
 {
-	int nchildren = 3;
+	int nchildren;
+	
+	if (argc != 2)
+		error("incorrect usage: expected 1 parameter - number of child processes");
+	if (sscanf(argv[1], "%d", &nchildren) != 1 || nchildren <= 0)
+		error("incorrect usage: expected positive number - number of child processes");
 
 	/*  fds to be polled.
 	 *  from_child_fds[nchildren-1] is not a valid pipe (last child send output to stdout) */
