@@ -32,7 +32,7 @@ void print_time_diff(struct timespec end, struct timespec begin, FILE *fout);
 #define PARALLEL(func_call)	({								\
 		pid_t _fork_res;									\
 		if ((_fork_res = fork()) == 0) {					\
-			func_call;										\
+			{ func_call; }									\
 			exit(EXIT_SUCCESS);								\
 		} else if (_fork_res == -1)							\
 			error("fork() failed: %s", strerror(errno));	\

@@ -63,7 +63,9 @@ int main(int argc, char *argv[])
 		if (srcstat.st_ino == dststat.st_ino)
 			skip_file("'%s' and '%s' are the same file", srcpath, dstpath);
 		if (copyfile(ifd, ofd) == -1)
-			skip_file("error while copying file '%s': %s", *argv, strerror(errno));		
+			skip_file("error while copying file '%s': %s", srcpath, strerror(errno));
+		if (close(ifd) == -1)
+			error("cannot close file %s: %s", srcpath, strerror(errno));
 	}
 	return 0;
 }
